@@ -32,7 +32,7 @@ RegisterServerEvent("ENT510:buyItem", function(index, count)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	if index and Config.Items and Config.Items[index] then
 		local item = Config.Items[index]
-			if xPlayer.getMoney() >= (item.price * count) then   --<--- this string is correct
+			if xPlayer.getMoney() >= (item.price * count) then 
 			xPlayer.removeMoney(item.price * count)
 			xPlayer.addInventoryItem(item.name, count)
 			showNotify(xPlayer.source, _U('acquistato')..(item.label or "item"))
@@ -53,47 +53,4 @@ RegisterServerEvent("ENT510:buyItem", function(index, count)
 			showNotify(xPlayer.source, _U('non_haisoldi'))
 		end
 	end
-end)
-
-
-
-
------------------For support, scripts, and more----------------
---------------- https://discord.gg/wasabiscripts  -------------
----------------------------------------------------------------
-local weaponsOnly = false -- Weapons only that drop?
-
-ESX = exports["es_extended"]:getSharedObject()
-
-RegisterServerEvent('esx:onPlayerDeath')
-AddEventHandler('esx:onPlayerDeath', function(data)
-    data.victim = source
-    local xPlayer = ESX.GetPlayerFromId(data.victim)
-    local rawInventory = exports.ox_inventory:Inventory(data.victim).items
-    local inventory = {}
-    if weaponsOnly then
-        for _,v in pairs(rawInventory) do
-            if v.name:sub(0, 7) == 'WEAPON_' then
-                inventory[#inventory + 1] = {
-                    v.name,
-                    v.count,
-                    v.metadata
-                }
-                exports.ox_inventory:RemoveItem(data.victim, v.name, v.count, v.metadata)
-            end
-        end
-    else
-        for _,v in pairs(rawInventory) do
-            inventory[#inventory + 1] = {
-                v.name,
-                v.count,
-                v.metadata
-            }
-        end
-    end
-    local deathCoords = xPlayer.getCoords(true)
-    if #inventory > 0 then
-    --    xPlayer.removeInventoryItem('Death Drop', 'water', deathCoords)
-	   xPlayer.removeInventoryItem('water')
-    end
 end)
