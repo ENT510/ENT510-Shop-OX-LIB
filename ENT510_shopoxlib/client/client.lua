@@ -12,8 +12,6 @@
 
 
 ESX = exports["es_extended"]:getSharedObject()
-Config = {}
-local ox_target = exports.ox_target
 
 ---PED / TARGET OPTIONS---
 
@@ -36,6 +34,8 @@ function CreateNPC(modelHash, NPC)
     BeginTextCommandSetBlipName("STRING")
     AddTextComponentString(Config.NameShop)
     EndTextCommandSetBlipName(blip)
+
+    
     local ped = CreatePed(4, modelHash, coords.x, coords.y, coords.z - 1, NPC.heading, false, true)
     SetBlockingOfNonTemporaryEvents(ped, true)
     FreezeEntityPosition(ped, true)
@@ -43,7 +43,7 @@ function CreateNPC(modelHash, NPC)
     SetPedHasAiBlip(ped, true)
     Citizen.CreateThread(function()
         if Config.TARGET == 'target' then
-            DisableControlAction(0, 177, true)
+
         exports.ox_target:addLocalEntity((ped), {
             {
                 name = 'ped',
@@ -51,7 +51,6 @@ function CreateNPC(modelHash, NPC)
                 label = _U('titolo_aperturashop'),
                 onSelect = function()
                     lib.showMenu('ENT510_shop_ox')
-                    -- FreezeEntityPosition(PlayerPedId(),true )
                     
                 end
             }
@@ -64,22 +63,19 @@ if Config.TARGET == 'textui' then
     })
     
     function point:onEnter()
-        -- lib.showTextUI(Config.TextUiLabel)
-        exports['ENT510-TextUI']:Show(Config.TextUiLabel)
+        lib.showTextUI(Config.TextUiLabel)
+        -- exports['ENT510-TextUI']:Show(Config.TextUiLabel)
     end
     
     function point:onExit()
-        -- lib.hideTextUI()
-        exports['ENT510-TextUI']:Hide()
+        lib.hideTextUI()
+        -- exports['ENT510-TextUI']:Hide()
         
     end
     
     function point:nearby()    
         if self.currentDistance < 3 and IsControlJustReleased(0, 38) then
             exports['ox_lib']:showMenu('ENT510_shop_ox')
-            -- FreezeEntityPosition(PlayerPedId(),true )
-                 DisableControlAction(0, 177, true)
-             
         end
     end
 end
@@ -87,24 +83,12 @@ Wait(1000)
     end)
 end
 
---- event for open shop ---
-
-Citizen.CreateThread(function()
-    if Config.Command == true then
-        RegisterCommand(Config.commandShop,
-    function() lib.showMenu('ENT510_shop_ox') end)
-    elseif Config.Command == false then
-        RegisterCommand('', function() end)
-    end
-end)
-
---- Dont TOUCH ---
-
 Citizen.CreateThread(function()
     lib.registerMenu({
         id = 'ENT510_shop_ox',
         title = Config.NameShop,
         position = 'top-left',
+        disableInput = true,
         options = Config.Items
     }, function(selected)
         local input = lib.inputDialog('🏪🛒 ITEMS SHOP 🛒🏪', {
@@ -118,6 +102,9 @@ Citizen.CreateThread(function()
                 move = false
             }
         })
+        if not input then return 
+            lib.showMenu('ENT510_shop_ox')
+        end
         local alert = lib.alertDialog({
             header = 'Do you want to proceed with the purchase?',
             content = 'Confirm or cancel your purchase',
@@ -125,13 +112,15 @@ Citizen.CreateThread(function()
             size = 'sm',
             cancel = true,
         })
-        -- FreezeEntityPosition(PlayerPedId(),false)
-        if alert == "cancel" then return end
+
+        if alert == "cancel" then return 
+        lib.showMenu('ENT510_shop_ox')
+        end
         if not input then return end
         local quantita = input[1]
         if quantita > 0 then
             TriggerServerEvent("ENT510:buyItem", selected, quantita)
-            ExecuteCommand('me Sta Comprando ~b~Qualcosa')  -- <-- Show target over head when buy , Work whit /ME resource
+            -- ExecuteCommand('me Sta Comprando ~b~Qualcosa')  -- <-- Show target over head when buy , Work whit /ME resource
         end
     end)
 end)

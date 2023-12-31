@@ -32,10 +32,10 @@ RegisterServerEvent("ENT510:buyItem", function(index, count)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	if index and Config.Items and Config.Items[index] then
 		local item = Config.Items[index]
-			if xPlayer.getMoney() >= (item.price * count) then 
+			if xPlayer.getMoney() >= (item.price * count) then   --<--- this string is correct
 			xPlayer.removeMoney(item.price * count)
 			xPlayer.addInventoryItem(item.name, count)
-			showNotify(xPlayer.source, _U('acquistato')..(item.label or "item"))
+			showNotify(xPlayer.source, _U('acquistato')..' '.. (item.name) ..' '..'x' ..' '.. count .. ' '.. 'at price' .. ' ' .. item.price * count ..'$')
 			local connect = {
 				{
 					["color"] = "8663711",
@@ -54,3 +54,5 @@ RegisterServerEvent("ENT510:buyItem", function(index, count)
 		end
 	end
 end)
+
+

@@ -4,48 +4,31 @@ game 'gta5'
 
 author 'ENT510'
 
-version '2.0'
+version '3.0'
 
 lua54 'yes'
 
-
-shared_script '@es_extended/imports.lua'
-
 client_scripts {
 	'@es_extended/locale.lua',
-	'client/client.lua',
-	'locales/it.lua',
-	'locales/en.lua',
+	'client/*',
+	'locales/*',
 	'shared/config.lua'
 
 }
-
 
 server_scripts {
 	'@es_extended/locale.lua',
-	'server/server.lua',
-	'versioncheck.lua',
-	'locales/it.lua',
-	'locales/en.lua',
+	'server/*',
+	'locales/*',
 	'shared/config.lua'
 }
 
-
-dependency 'ENT510_shopoxlib'
-
-
 dependencies {
-    'ENT510_shopoxlib',
-    'ox_target',
+    'ox_inventory',
 	'ox_lib'
 }
 
-shared_script '@es_extended/imports.lua'
-
-shared_script '@ox_lib/init.lua'
-
 shared_scripts {
     '@ox_lib/init.lua',
+	'@es_extended/imports.lua'
 }
-
-server_scripts { '@mysql-async/lib/MySQL.lua' }

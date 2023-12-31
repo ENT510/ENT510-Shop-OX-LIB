@@ -19,10 +19,6 @@ Config.Notify       = "oxlib" -- <-- 'default' Use esx notification / 'okok' Use
 
 Config.Locale       = 'en'  -- <-- Check the locales
 
-Config.Command      = false  -- <-- If true open the shop also with the command, if false open only the command via interaction. 
-
-Config.commandShop  = 'shop' -- <-- Command for open shop
-
 Config.NameShop     = 'ITEMS SHOP' -- <-- NAME SHOP 
 
 Config.TARGET       = 'textui' -- <-- If 'target' Use ox_target / If 'textui' use Textui by Ox Lib
